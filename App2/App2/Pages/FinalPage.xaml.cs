@@ -1,23 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using System.Web;
-using System.Security.Cryptography;
-using System.IO;
-using MailKit.Net.Imap;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Globalization;
-using System.ComponentModel;
 using MailKit.Net.Smtp;
-using MailKit;
 using MimeKit;
+
 
 namespace App2.Pages
 {

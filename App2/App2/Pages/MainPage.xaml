@@ -16,7 +16,7 @@
                          VerticalOptions="FillAndExpand"/>
             </Frame>
         </ScrollView>
-        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="End">
             <Grid x:Name="gridPass" Margin="30,0,30,0">
                 <Label Text="Napište kód:" Grid.Column="0" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
                 <Entry x:Name="editPass" Grid.Column="1" HorizontalOptions="FillAndExpand"/>

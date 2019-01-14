@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:App2"
+             x:Class="App2.MainPage">
+
+    <StackLayout>
+        <!-- Place new controls here -->
+        <Label x:Name="lblTitle2" 
+               Margin="0,20,0,0"
+               HorizontalOptions="Center"/>
+        <ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0,10,0">
+            <Frame>
+                <StackLayout x:Name="parent"
+                         HorizontalOptions="CenterAndExpand"
+                         VerticalOptions="FillAndExpand"/>
+            </Frame>
+        </ScrollView>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+            <Grid x:Name="gridPass" Margin="30,0,30,0">
+                <Label Text="Napište kód:" Grid.Column="0" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
+                <Entry x:Name="editPass" Grid.Column="1" HorizontalOptions="FillAndExpand"/>
+            </Grid>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Button Text="Scan" x:Name="btnQR" Clicked="BtnQR_Clicked"/>
+            <Button Text="Vložit kód"  x:Name="btnCode" Clicked="BtnCode_Clicked" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
+        </StackLayout>
+        <Button Text="Poslat výsledek" x:Name="btnSubmit" Clicked="BtnSubmit_Clicked"/>
+
+    </StackLayout>
+
+</ContentPage>

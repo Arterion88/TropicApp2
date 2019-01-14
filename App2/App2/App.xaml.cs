@@ -1,4 +1,5 @@
-﻿using System;
+﻿using App2.Pages;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +12,8 @@ namespace App2
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new TitlePage());
+            MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.Black);
         }
 
         protected override void OnStart()

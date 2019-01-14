@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App2.Pages.FinalPage">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Label 
+                x:Name="lbl1"
+                Margin="10,10,10,10"   
+                HorizontalTextAlignment="Center"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+
+                <Grid x:Name="gridFrm" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="30, 0, 30 ,0">
+
+                    <!-- Region Jméno -->
+                    <Label 
+                    Text="Jméno:" 
+                    HorizontalOptions="Start" 
+                    VerticalTextAlignment="Center" 
+                    HorizontalTextAlignment="End"
+                    Grid.Row="0"
+                    Grid.Column="0"/>
+                    <Entry 
+                    x:Name="editName"
+                    HorizontalOptions="FillAndExpand"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                        Focused="Edit_Focused"/>
+                    <!-- EndRegion -->
+
+                    <!-- Region Příjmení -->
+                    <Label 
+                    Text="Příjmení:" 
+                    HorizontalOptions="Start" 
+                    VerticalTextAlignment="Center" 
+                    HorizontalTextAlignment="End"
+                    Grid.Row="1"
+                    Grid.Column="0"/>
+                    <Entry 
+                    x:Name="editName2"
+                    HorizontalOptions="FillAndExpand"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Focused="Edit_Focused"/>
+                    <!-- EndRegion -->
+
+                    <!-- Region Email -->
+                    <Label 
+                    Text="Email:" 
+                    HorizontalOptions="Start" 
+                    VerticalTextAlignment="Center" 
+                    HorizontalTextAlignment="End"
+                    Grid.Row="2"
+                    Grid.Column="0"/>
+                    <Entry 
+                    x:Name="editMail"
+                    Keyboard="Email"
+                    HorizontalOptions="FillAndExpand"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Focused="Edit_Focused"/>
+                    <!-- EndRegion -->
+
+                    <!-- Region Email Potvrzení -->
+                    <Label 
+                    Text="Potvrzení emailu:" 
+                    HorizontalOptions="Start" 
+                    VerticalTextAlignment="Center" 
+                    HorizontalTextAlignment="End"
+                    Grid.Row="3"
+                    Grid.Column="0"/>
+                    <Entry 
+                    x:Name="editMail2"
+                    Keyboard="Email"
+                    HorizontalOptions="FillAndExpand"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Focused="Edit_Focused"/>
+                    <!-- EndRegion -->
+
+                    <!-- Region Telefon -->
+                    <Label 
+                    Text="Telefonní číslo (nepovinné):" 
+                    HorizontalOptions="Start" 
+                    VerticalTextAlignment="Center" 
+                    HorizontalTextAlignment="Start"
+                    Grid.Row="4"
+                    Grid.Column="0"/>
+                    <Entry 
+                    x:Name="editPhone"
+                    Keyboard="Telephone"
+                    HorizontalOptions="FillAndExpand"
+                    Grid.Row="4"
+                    Grid.Column="1"/>
+                    <!-- EndRegion -->
+
+                </Grid>
+
+                <Label
+                Margin="10,10,10,10"    
+                Text="Odesláním emailu souhlasíte s následujícímí podmínky:"
+                HorizontalOptions="CenterAndExpand"/>
+
+                <Frame HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" Margin="10,0,10,0" >
+                    <Label>Lorem ipsum dolor sit amet consectetuer dui justo et at Phasellus. Non pulvinar ut Nam Ut ut accumsan elit sollicitudin lacinia sed. Leo risus Maecenas eget tempus semper metus felis elit Donec ac. Odio scelerisque ut lacus orci Vestibulum accumsan et sit adipiscing Ut. Congue pellentesque libero mauris sit tempus dui parturient tincidunt tempus sagittis. Morbi pretium rutrum Vestibulum molestie Ut Vivamus tincidunt.
+
+Lacus vel adipiscing nibh tincidunt sapien eget consequat eu convallis magna. Sagittis Nam et augue elit ornare Ut elit Vestibulum turpis tincidunt. Nulla Pellentesque In quis Pellentesque ut Nam lorem ante sem Cras. In Maecenas leo wisi elit adipiscing vel ut non ultrices scelerisque. Condimentum id id libero amet orci consectetuer Vestibulum Integer id tempus. Fusce.
+
+Quis tempus convallis senectus nunc at orci mauris ut justo quis. Curabitur malesuada lacus Integer felis nunc mauris id sem et In. Sociis justo nibh quis nulla non interdum vel magnis auctor Vestibulum. Condimentum Nam faucibus Nunc Lorem pretium gravida consequat adipiscing ultrices fames. Nam ut dictum in cursus libero vitae ac Nullam.
+
+Libero ut et augue dui semper vitae cursus elit cursus et. Nulla quis Phasellus wisi enim auctor ut ipsum at vel ridiculus. Cursus Cum massa condimentum morbi non vitae non Vivamus Vestibulum auctor. Dui consequat sodales ac cursus neque Sed et tristique porttitor faucibus. Nulla sem ut Ut dolor Phasellus Ut mauris mi congue Aenean. Metus Vestibulum et et consectetuer gravida tellus lacus massa felis neque. Fringilla id augue.
+
+Vel Nam Nulla quis eget cursus pretium vitae diam Phasellus neque. Scelerisque orci dui odio eget tincidunt Aliquam id id Nam eros. Vitae et nonummy id pede nunc Ut tempus ut accumsan purus. Nibh dui non turpis penatibus hendrerit turpis dapibus nibh pretium diam. Convallis tincidunt turpis sed a enim mattis ipsum Praesent wisi ullamcorper. Vitae tellus Sed nec volutpat.
+
+                    </Label>
+                </Frame>
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Label Text="Souhlasím s podmínkami" VerticalTextAlignment="Center"/>
+                    <Switch IsToggled="False" Toggled="Switch_Toggled"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Button Text="Zpět" x:Name="btnBack" Clicked="BtnBack_Clicked"/>
+                    <Button Text="Odeslat e-mail" x:Name="btnSubmit" Clicked="BtnSubmit_Clicked" IsEnabled="False"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

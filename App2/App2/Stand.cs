@@ -21,23 +21,26 @@ namespace App2
             Points = points;
         }
 
+        public Stand(XmlNode stand)
+        {
+            Text = stand.Attributes["Text"].Value;
+            Pass = stand.Attributes["Pass"].Value;
+            Visited = false;
+            Points = int.Parse(stand.Attributes["Points"].Value);
+        }
+
         public StackLayout GetStackLayout()
         {
             Color color = Color.Default;
+            double fontSize = 20;
             if (Visited)
                 color = Color.Green;
 
-            StackLayout stack = new StackLayout() { Orientation = StackOrientation.Horizontal };
-            stack.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color, Opacity = Visited ? 1 : 0 });
-            stack.Children.Add(new Label { Text = this.Text, HorizontalOptions = LayoutOptions.StartAndExpand, HorizontalTextAlignment = TextAlignment.Start, TextColor = color});
-            stack.Children.Add(new Label { Text = "Počet bodů: " + Points, HorizontalOptions = LayoutOptions.End,HorizontalTextAlignment= TextAlignment.Start, TextColor = color});
-            
+            StackLayout stack = new StackLayout() { Orientation = StackOrientation.Horizontal,HorizontalOptions = LayoutOptions.FillAndExpand };
+            stack.Children.Add(new Label { Text = "\u2713", FontSize=fontSize, HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color, Opacity = Visited ? 1 : 0 });
+            stack.Children.Add(new Label { Text = this.Text, FontSize = fontSize, HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start, TextColor = color });
+            stack.Children.Add(new Label { Text = Points.ToString(), FontSize = fontSize, HorizontalOptions = LayoutOptions.End,HorizontalTextAlignment= TextAlignment.Start, TextColor = color });
             return stack;
-        }
-
-        public static Stand NewStand(XmlNode stand)
-        {
-            return new Stand(stand["Text"].InnerText, stand["Pass"].InnerText, int.Parse(stand["Points"].InnerText));
         }
 
         public bool Visit(string pass)

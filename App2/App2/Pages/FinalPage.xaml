@@ -100,7 +100,7 @@
 
                 <Label
                 Margin="10,10,10,10"    
-                Text="Odesláním emailu souhlasíte s následujícímí podmínky:"
+                Text=""
                 HorizontalOptions="CenterAndExpand"/>
 
                 <Frame HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" Margin="10,0,10,0" >

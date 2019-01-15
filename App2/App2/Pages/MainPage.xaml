@@ -4,31 +4,35 @@
              xmlns:local="clr-namespace:App2"
              x:Class="App2.MainPage">
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label x:Name="lblTitle2" 
+    <ScrollView>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
+            <!-- Place new controls here -->
+            <Label x:Name="lblTitle2" 
                Margin="0,20,0,0"
                HorizontalOptions="Center"/>
-        <ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0,10,0">
-            <Frame>
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10,0,10,0">
                 <StackLayout x:Name="parent"
-                         HorizontalOptions="CenterAndExpand"
+                         HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand"/>
             </Frame>
-        </ScrollView>
-        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="End">
-            <Grid x:Name="gridPass" Margin="30,0,30,0">
-                <Label Text="Napište kód:" Grid.Column="0" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
-                <Entry x:Name="editPass" Grid.Column="1" HorizontalOptions="FillAndExpand"/>
-            </Grid>
-        </StackLayout>
 
-        <StackLayout Orientation="Horizontal">
-            <Button Text="Scan" x:Name="btnQR" Clicked="BtnQR_Clicked"/>
-            <Button Text="Vložit kód"  x:Name="btnCode" Clicked="BtnCode_Clicked" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
-        </StackLayout>
-        <Button Text="Poslat výsledek" x:Name="btnSubmit" Clicked="BtnSubmit_Clicked"/>
+            <StackLayout  HorizontalOptions="FillAndExpand" VerticalOptions="End">
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="End">
 
-    </StackLayout>
+                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" Margin="30,0,30,0">
+                        <Label Text="Napište kód:" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End" Margin="0,0,30,0"/>
+                        <Entry x:Name="editPass" HorizontalOptions="FillAndExpand"  />
+                    </StackLayout>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="End">
+                    <Button Text="Scan" x:Name="btnQR" Clicked="BtnQR_Clicked"/>
+                    <Button Text="Vložit kód"  x:Name="btnCode" Clicked="BtnCode_Clicked" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+                <Button Text="Poslat výsledek" x:Name="btnSubmit" Clicked="BtnSubmit_Clicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 
 </ContentPage>

@@ -15,6 +15,8 @@ namespace App2
 {
     public static class Settings
     {
+        //Todo: Add proguard.cfg https://docs.microsoft.com/en-us/appcenter/sdk/push/xamarin-android
+
         public static Color BackgroundColor { get { return Color.LightBlue; } }
         public static Event CurrentEvent { get; set; }
         public static List<Event> events = new List<Event>();

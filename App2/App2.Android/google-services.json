@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "97319234104",
+    "firebase_url": "https://tropic-app-573a4.firebaseio.com",
+    "project_id": "tropic-app-573a4",
+    "storage_bucket": "tropic-app-573a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97319234104:android:cfa4cb9d2a6fbe84",
+        "android_client_info": {
+          "package_name": "com.companyname.App2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97319234104-94iqa7pmjel3iiedpisptlin9kjjdt5u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhAQ7ehN6fQhJ61_Zoyc6KMHI5rroL464"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

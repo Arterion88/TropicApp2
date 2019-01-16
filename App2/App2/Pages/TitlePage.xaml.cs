@@ -17,6 +17,7 @@ namespace App2.Pages
 
         public TitlePage()
         {
+
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
             this.BackgroundColor = Settings.BackgroundColor;

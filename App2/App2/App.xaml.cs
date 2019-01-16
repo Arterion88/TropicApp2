@@ -1,4 +1,9 @@
 ﻿using App2.Pages;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Push;
+using Microsoft.AppCenter.Distribute;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -18,7 +23,10 @@ namespace App2
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            AppCenter.Start("android=1fb3ced4-b621-4adc-a1be-f8ebf0d4d294;" +
+                  "uwp=0039cfbe-f7b2-4499-ae28-859854b77e30;" +
+                  "ios=f7528c53-caab-4714-9bea-5ad5b241e5d0",
+                  typeof(Analytics), typeof(Crashes), typeof(Push), typeof(Distribute));
         }
 
         protected override void OnSleep()

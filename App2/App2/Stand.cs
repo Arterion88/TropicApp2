@@ -10,6 +10,7 @@ namespace App2
     {
         public string Text { get; set; }
         public string Pass { get; private set; }
+        public ImageSource source;
         public bool Visited;
         public int Points { get; set; }
 
@@ -25,6 +26,7 @@ namespace App2
         {
             Text = stand.Attributes["Text"].Value;
             Pass = stand.Attributes["Pass"].Value;
+            source = ImageSource.FromStream(()=>Settings.DownloadImage(Settings.FtpServer + "/QRApp/" + stand.Attributes["Img"].Value));
             Visited = false;
             Points = int.Parse(stand.Attributes["Points"].Value);
         }
@@ -38,6 +40,7 @@ namespace App2
 
             StackLayout stack = new StackLayout() { Orientation = StackOrientation.Horizontal,HorizontalOptions = LayoutOptions.FillAndExpand };
             stack.Children.Add(new Label { Text = "\u2713", FontSize=fontSize, HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color, Opacity = Visited ? 1 : 0 });
+            stack.Children.Add(new Image() { Source = source });
             stack.Children.Add(new Label { Text = this.Text, FontSize = fontSize, HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start, TextColor = color });
             stack.Children.Add(new Label { Text = Points.ToString(), FontSize = fontSize, HorizontalOptions = LayoutOptions.End,HorizontalTextAlignment= TextAlignment.Start, TextColor = color });
             return stack;

@@ -1,4 +1,5 @@
-﻿using Plugin.Settings;
+﻿using Microsoft.AppCenter.Crashes;
+using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace App2
         public static Event CurrentEvent { get; set; }
         public static List<Event> events = new List<Event>();
         public const string Version = "0.8.9";
+        public const string FtpServer = "ftp://tropicnews.eu//";
 
         #region Saveable
         private static ISettings AppSettings
@@ -33,9 +35,9 @@ namespace App2
         
         public static async Task<bool> DownloadFileFTP(Page page)
         {
+            //await page.DisplayAlert("PushEnabled", (await Microsoft.AppCenter.Push.Push.IsEnabledAsync()).ToString(), "Ok");
             //await DisplayAlert("Now",DateTime.Now.ToString(),"Ok");
-
-            string serverPath = "ftp://tropicnews.eu//AppEvents.xml";
+            string serverPath = FtpServer + "AppEvents.xml";
 
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverPath);
 
@@ -57,7 +59,36 @@ namespace App2
                 await page.DisplayAlert("Chyba", "Jste připojení k internetu?", "Ok");
                 return false;
             }
-            
+        }
+
+        public static Stream DownloadImage(string imagePath)
+        {
+            //await page.DisplayAlert("PushEnabled", (await Microsoft.AppCenter.Push.Push.IsEnabledAsync()).ToString(), "Ok");
+            //await DisplayAlert("Now",DateTime.Now.ToString(),"Ok");
+
+            string serverPath = FtpServer +"QRApp/"+ imagePath;
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverPath);
+
+            request.KeepAlive = false;
+            request.UsePassive = true;
+            request.UseBinary = true;
+
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.Credentials = new NetworkCredential("app.tropicnews.eu", "fCqjHlmqgB54");
+
+            // Read the file from the server & write to destination  
+            try
+            {
+                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) // Error here
+                using (Stream stream = response.GetResponseStream())
+                    return stream;
+            }
+            catch (Exception)
+            {
+                
+                return null;
+            }
         }
 
         private static async Task<bool> ProcessFile(Stream xml, Page page)
@@ -79,6 +110,7 @@ namespace App2
                 foreach (XmlNode node in doc.GetElementsByTagName("Event"))
                 {
                     Event event1 = new Event(node);
+
                     //if (DateTime.Today < event1.To)
                     if (!Settings.FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
                     {
@@ -95,6 +127,7 @@ namespace App2
             catch (Exception ex)
             {
                 await page.DisplayAlert("title", ex.Message, "cancel");
+                Crashes.TrackError(ex);
                 throw;
             }
 

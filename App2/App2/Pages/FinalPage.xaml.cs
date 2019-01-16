@@ -88,9 +88,14 @@ namespace App2.Pages
 
 
             }
-            catch (Exception ex)
+            catch (MailKit.ServiceNotConnectedException ex)
             {
-                DisplayAlert("Error", ex.ToString(), "Ok");
+                DisplayAlert("Web Error", ex.Message, "Ok");
+                return;
+            }
+            catch (Exception )
+            {
+                DisplayAlert("Chyba", "Data nebyla odeslána. Jste připojení k internetu?", "Ok");
                 return;
             }
 

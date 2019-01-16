@@ -20,6 +20,7 @@ namespace App2.Pages
             };
             zxing.OnScanResult += (result) =>
             {
+
                 zxing.Unfocus();
                 zxing.IsScanning = false;
                 zxing.IsAnalyzing = false;
@@ -32,8 +33,8 @@ namespace App2.Pages
 
             overlay = new ZXingDefaultOverlay
             {
-                TopText = "Přiložte váš telefon ke QR kódu",
-                BottomText = "Skenování se provede automaticky",
+                //TopText = "Přiložte váš telefon ke QR kódu",
+                //BottomText = "Skenování se provede automaticky",
                 ShowFlashButton = zxing.HasTorch,
                 AutomationId = "zxingDefaultOverlay",
             };
@@ -56,14 +57,12 @@ namespace App2.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             zxing.IsScanning = true;
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-
             zxing.IsScanning = false;
         }
     }

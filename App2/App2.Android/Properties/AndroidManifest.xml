@@ -3,5 +3,6 @@
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.FLASHLIGHT" />
-	<application android:label="App2.Android"></application>
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="App2.Android" android:icon="@mipmap/launcher_foreground"></application>
 </manifest>

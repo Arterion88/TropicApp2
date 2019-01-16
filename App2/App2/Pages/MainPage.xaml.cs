@@ -38,8 +38,9 @@ namespace App2
 
         protected override void OnAppearing()
         {
-            if (Settings.FinishedEvents.Split(';').ToList().Contains(Settings.CurrentEvent.Id.ToString()))
-                Navigation.PushAsync(new TitlePage());
+            //if (Settings.FinishedEvents.Split(';').ToList().Contains(Settings.CurrentEvent.Id.ToString()))
+            //    Navigation.PushAsync(new TitlePage());
+            //DisplayAlert("Test","Test","cancel");
             base.OnAppearing();
 
         }
@@ -80,12 +81,20 @@ namespace App2
         private void Show()
         {
             btnQR.IsVisible = Settings.Permission;
-
             lblTitle2.Text = "Celkově bodů: " + ClearedPoints + " / " + GetTotalPoints();
 
+            #region Header
             parent.Children.Clear();
+            StackLayout header = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand };
+            header.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 });
+            header.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Center });
+            header.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.Center });
+            parent.Children.Add(header);
+            #endregion
+
             foreach (Stand stand in stands)
                 parent.Children.Add(stand.GetStackLayout());
+                
         }
 
         public void CheckCode(string result)

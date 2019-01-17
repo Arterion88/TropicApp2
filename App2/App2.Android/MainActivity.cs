@@ -20,7 +20,7 @@ namespace App2.Droid
             base.OnCreate(savedInstanceState);
             Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            AppCenter.Start("a755363f-18f6-49fe-ae01-ed6613b515a3", typeof(Analytics), typeof(Crashes),typeof(Push));
+
             LoadApplication(new App());
         }
 
@@ -28,6 +28,12 @@ namespace App2.Droid
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        protected override void OnNewIntent(Android.Content.Intent intent)
+        {
+            base.OnNewIntent(intent);
+            Push.CheckLaunchedFromNotification(this, intent);
         }
     }
 }

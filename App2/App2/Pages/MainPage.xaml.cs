@@ -12,7 +12,7 @@ namespace App2
     public partial class MainPage : ContentPage
     {
         List<Stand> stands = Settings.CurrentEvent.Stands;
-
+        int pickerIndex=5,pageIndex=0;
         int ClearedPoints
         {
             get
@@ -49,25 +49,6 @@ namespace App2
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-            //DownloadFile();
-            //DownloadFileFTP();
-
-
-            //stands.Add(new Stand("Hobby", "hobby"));
-            //stands.Add(new Stand("Fox", "fox", 5));
-            //stands.Add(new Stand("Mivardi", "mivardi", 2));
-            //stands.Add(new Stand("Dam", "dam",9));
-            //stands.Add(new Stand("Egerfish", "egerfish",2));
-            //stands.Add(new Stand("Saenger", "saenger",7));
-            //stands.Add(new Stand("Nikl", "nikl",5));
-            //stands.Add(new Stand("Mikado", "mikado",3));
-            //stands.Add(new Stand("Mikbaits", "mikbaits",6));
-            //stands.Add(new Stand("Sportcarp", "sportcarp",8));
-            //stands.Add(new Stand("Moss", "moss",4));
-            //stands.Add(new Stand("Normark", "normark",10));
-            //stands.Add(new Stand("Stormkloth", "stormkloth",6));
-            //stands.Add(new Stand("Slovimex", "slovimex",2));
-            //stands.Add(new Stand("Svendsen", "svendsen",3));
 
             string[] array = Settings.Stands.Split(';');
             for (int i = 0; i < array.Length; i++)
@@ -82,18 +63,42 @@ namespace App2
         {
             btnQR.IsVisible = Settings.Permission;
             lblTitle2.Text = "Celkově bodů: " + ClearedPoints + " / " + GetTotalPoints();
+            
+            if (picker.SelectedIndex == 0)
+                btnPageBack.IsVisible = btnPageNext.IsVisible = false;
+            else
+            {
+                if (picker.SelectedIndex == -1)
+                    picker.SelectedIndex = 1;
+                btnPageBack.IsVisible = !(pageIndex == 0);
+                btnPageNext.IsVisible = !(pageIndex == stands.Count / int.Parse(picker.Items[picker.SelectedIndex]));
+            }
+            
+            List<string> test = picker.Items.ToList();
+            parent.Children.Clear();
 
             #region Header
-            parent.Children.Clear();
-            StackLayout header = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand };
-            header.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 });
-            header.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Center });
-            header.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.Center });
-            parent.Children.Add(header);
+
+            //parent.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 },0,0);
+            //parent.Children.Add(new Label { Text = "Image", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity = 0 }, 1, 0);
+            //parent.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start }, 2, 0);
+            //parent.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.End }, 3, 0);
+
             #endregion
 
-            foreach (Stand stand in stands)
-                parent.Children.Add(stand.GetStackLayout());
+            int start = pageIndex * pickerIndex;
+
+            
+
+            int max = picker.SelectedIndex == 0 ? stands.Count : int.Parse(picker.Items[picker.SelectedIndex]);
+
+
+            for (int y = start; y < Math.Min(start+max,stands.Count); y++)
+            {
+                List<View> list = stands[y].AddRow();
+                for (int x = 0; x < list.Count; x++)
+                    parent.Children.Add(list[x], x, y-start);
+            }
                 
         }
 
@@ -172,6 +177,25 @@ namespace App2
             FinalPage finalPage = new FinalPage(ClearedPoints, GetTotalPoints());
             finalPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.Black);
             Navigation.PushAsync(finalPage);
+        }
+
+        private void BtnPage_Clicked(object sender, EventArgs e)
+        {
+            if (picker.SelectedIndex == 0)
+                return;
+            if ((sender == btnPageBack && pageIndex == 0) || (sender == btnPageNext && pageIndex == stands.Count / int.Parse(picker.Items[picker.SelectedIndex])))
+                return;
+            pageIndex = sender == btnPageBack ? pageIndex - 1 : pageIndex + 1;
+            Show();
+        }
+
+        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            pickerIndex = picker.SelectedIndex == 0 ? stands.Count : int.Parse(picker.Items[picker.SelectedIndex]);
+            pageIndex = 0;
+            Show();
+            
         }
     }
 }

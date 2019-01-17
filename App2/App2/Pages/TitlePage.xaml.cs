@@ -19,12 +19,13 @@ namespace App2.Pages
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
+
             this.BackgroundColor = Settings.BackgroundColor;
         }
 
         private async void BtnNext_Clicked(object sender, EventArgs e)
         {
-            if (await Settings.DownloadFileFTP(this))
+            if (await Settings.DownloadFile(this))
                 await Navigation.PushAsync(new MainPage());
         }
 

@@ -1,4 +1,5 @@
-﻿using Plugin.Settings;
+﻿using Microsoft.AppCenter.Crashes;
+using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,14 @@ namespace App2
         public static List<Event> events = new List<Event>();
         public const string Version = "0.8.9";
 
+        public const string FtpServer = "ftp://tropicnews.eu/QRApp/";
+        public const string FtpLogin = "app.tropicnews.eu";
+        public const string FtpPassword = "fCqjHlmqgB54";
+
+        public const string Server = "http://app.tropicnews.eu/QRApp/";
+
+        public const string imgFolder = "Images/";
+
         #region Saveable
         private static ISettings AppSettings
         {
@@ -33,31 +42,78 @@ namespace App2
         
         public static async Task<bool> DownloadFileFTP(Page page)
         {
+            //await page.DisplayAlert("PushEnabled", (await Microsoft.AppCenter.Push.Push.IsEnabledAsync()).ToString(), "Ok");
             //await DisplayAlert("Now",DateTime.Now.ToString(),"Ok");
+            string serverPath = FtpServer + "AppEvents.xml";
+            serverPath = "http://app.tropicnews.eu/QRApp/AppEvents.xml";
+            WebRequest request = WebRequest.Create(serverPath);
+            request.Method = WebRequestMethods.File.DownloadFile;
+            //FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverPath);
 
-            string serverPath = "ftp://tropicnews.eu//AppEvents.xml";
+            //request.KeepAlive = false;
+            //request.UsePassive = true;
+            //request.UseBinary = true;
 
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverPath);
-
-            request.KeepAlive = false;
-            request.UsePassive = true;
-            request.UseBinary = true;
-
-            request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = new NetworkCredential("app.tropicnews.eu", "fCqjHlmqgB54");
+            //request.Method = WebRequestMethods.Ftp.DownloadFile;
+            //request.Credentials = new NetworkCredential(FtpLogin, FtpPassword);
 
             // Read the file from the server & write to destination  
             try
             {
-                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) // Error here
-                    return await ProcessFile(response.GetResponseStream(),page);
+                //using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) // Error here
+                //return await ProcessFile(response.GetResponseStream(),page);
+                using (WebResponse response = request.GetResponse())
+                    return await ProcessFile(response.GetResponseStream(), page);
             }
             catch (Exception)
             {
                 await page.DisplayAlert("Chyba", "Jste připojení k internetu?", "Ok");
                 return false;
             }
+        }
+
+        public static async Task<bool> DownloadFile(Page page)
+        {
+            string serverPath = Server + "AppEvents.xml";
+            WebRequest request = WebRequest.Create(serverPath);
+            request.Method = WebRequestMethods.File.DownloadFile;
+
+            // Read the file from the server & write to destination  
+            try
+            {
+                using (WebResponse response = request.GetResponse())
+                    return await ProcessFile(response.GetResponseStream(), page);
+            }
+            catch (Exception)
+            {
+                await page.DisplayAlert("Chyba", "Jste připojení k internetu?", "Ok");
+                return false;
+            }
+        }
+
+        public static Stream DownloadImage(string imagePath)
+        {
+            //await page.DisplayAlert("PushEnabled", (await Microsoft.AppCenter.Push.Push.IsEnabledAsync()).ToString(), "Ok");
+            //await DisplayAlert("Now",DateTime.Now.ToString(),"Ok");
+
+            string serverPath = Server + imgFolder + imagePath;
+
+            WebRequest request = WebRequest.Create(serverPath);
             
+            request.Method = WebRequestMethods.File.DownloadFile;
+            
+
+            // Read the file from the server & write to destination  
+            try
+            {
+                using (WebResponse response = request.GetResponse()) // Error here
+                using (Stream stream = response.GetResponseStream())
+                    return stream;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private static async Task<bool> ProcessFile(Stream xml, Page page)
@@ -79,6 +135,7 @@ namespace App2
                 foreach (XmlNode node in doc.GetElementsByTagName("Event"))
                 {
                     Event event1 = new Event(node);
+
                     //if (DateTime.Today < event1.To)
                     if (!Settings.FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
                     {
@@ -95,6 +152,7 @@ namespace App2
             catch (Exception ex)
             {
                 await page.DisplayAlert("title", ex.Message, "cancel");
+                Crashes.TrackError(ex);
                 throw;
             }
 

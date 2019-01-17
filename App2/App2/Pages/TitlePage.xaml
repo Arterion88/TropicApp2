@@ -4,7 +4,10 @@
              x:Class="App2.Pages.TitlePage">
     <ContentPage.Content>
         <StackLayout>
-            <Image/>
+            <Image x:Name="myImg"
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalOptions="CenterAndExpand"
+                   />
             <Label Text="Nikdo vám nedá více.."
                    VerticalOptions="CenterAndExpand" 
                    HorizontalOptions="CenterAndExpand" />

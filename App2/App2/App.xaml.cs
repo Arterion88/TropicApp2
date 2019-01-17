@@ -24,9 +24,11 @@ namespace App2
         protected override void OnStart()
         {
             AppCenter.Start("android=1fb3ced4-b621-4adc-a1be-f8ebf0d4d294;" +
-                  "uwp=0039cfbe-f7b2-4499-ae28-859854b77e30;" +
-                  "ios=f7528c53-caab-4714-9bea-5ad5b241e5d0",
-                  typeof(Analytics), typeof(Crashes), typeof(Push), typeof(Distribute));
+                            "uwp=0039cfbe-f7b2-4499-ae28-859854b77e30;" +
+                            "ios=f7528c53-caab-4714-9bea-5ad5b241e5d0",
+                            typeof(Analytics), 
+                            typeof(Crashes), 
+                            typeof(Push));
         }
 
         protected override void OnSleep()

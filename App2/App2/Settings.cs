@@ -22,7 +22,14 @@ namespace App2
         public static Event CurrentEvent { get; set; }
         public static List<Event> events = new List<Event>();
         public const string Version = "0.8.9";
-        public const string FtpServer = "ftp://tropicnews.eu//";
+
+        public const string FtpServer = "ftp://tropicnews.eu/QRApp/";
+        public const string FtpLogin = "app.tropicnews.eu";
+        public const string FtpPassword = "fCqjHlmqgB54";
+
+        public const string Server = "http://app.tropicnews.eu/QRApp/";
+
+        public const string imgFolder = "Images/";
 
         #region Saveable
         private static ISettings AppSettings
@@ -38,21 +45,44 @@ namespace App2
             //await page.DisplayAlert("PushEnabled", (await Microsoft.AppCenter.Push.Push.IsEnabledAsync()).ToString(), "Ok");
             //await DisplayAlert("Now",DateTime.Now.ToString(),"Ok");
             string serverPath = FtpServer + "AppEvents.xml";
+            serverPath = "http://app.tropicnews.eu/QRApp/AppEvents.xml";
+            WebRequest request = WebRequest.Create(serverPath);
+            request.Method = WebRequestMethods.File.DownloadFile;
+            //FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverPath);
 
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverPath);
+            //request.KeepAlive = false;
+            //request.UsePassive = true;
+            //request.UseBinary = true;
 
-            request.KeepAlive = false;
-            request.UsePassive = true;
-            request.UseBinary = true;
-
-            request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = new NetworkCredential("app.tropicnews.eu", "fCqjHlmqgB54");
+            //request.Method = WebRequestMethods.Ftp.DownloadFile;
+            //request.Credentials = new NetworkCredential(FtpLogin, FtpPassword);
 
             // Read the file from the server & write to destination  
             try
             {
-                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) // Error here
-                    return await ProcessFile(response.GetResponseStream(),page);
+                //using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) // Error here
+                //return await ProcessFile(response.GetResponseStream(),page);
+                using (WebResponse response = request.GetResponse())
+                    return await ProcessFile(response.GetResponseStream(), page);
+            }
+            catch (Exception)
+            {
+                await page.DisplayAlert("Chyba", "Jste připojení k internetu?", "Ok");
+                return false;
+            }
+        }
+
+        public static async Task<bool> DownloadFile(Page page)
+        {
+            string serverPath = Server + "AppEvents.xml";
+            WebRequest request = WebRequest.Create(serverPath);
+            request.Method = WebRequestMethods.File.DownloadFile;
+
+            // Read the file from the server & write to destination  
+            try
+            {
+                using (WebResponse response = request.GetResponse())
+                    return await ProcessFile(response.GetResponseStream(), page);
             }
             catch (Exception)
             {
@@ -66,27 +96,22 @@ namespace App2
             //await page.DisplayAlert("PushEnabled", (await Microsoft.AppCenter.Push.Push.IsEnabledAsync()).ToString(), "Ok");
             //await DisplayAlert("Now",DateTime.Now.ToString(),"Ok");
 
-            string serverPath = FtpServer +"QRApp/"+ imagePath;
+            string serverPath = Server + imgFolder + imagePath;
 
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverPath);
-
-            request.KeepAlive = false;
-            request.UsePassive = true;
-            request.UseBinary = true;
-
-            request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = new NetworkCredential("app.tropicnews.eu", "fCqjHlmqgB54");
+            WebRequest request = WebRequest.Create(serverPath);
+            
+            request.Method = WebRequestMethods.File.DownloadFile;
+            
 
             // Read the file from the server & write to destination  
             try
             {
-                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) // Error here
+                using (WebResponse response = request.GetResponse()) // Error here
                 using (Stream stream = response.GetResponseStream())
                     return stream;
             }
             catch (Exception)
             {
-                
                 return null;
             }
         }

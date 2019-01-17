@@ -11,9 +11,16 @@
                Margin="0,20,0,0"
                HorizontalOptions="Center"/>
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10,0,10,0">
-                <StackLayout x:Name="parent"
+                <Grid x:Name="parent"
                          HorizontalOptions="FillAndExpand"
-                         VerticalOptions="FillAndExpand"/>
+                         VerticalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </Frame>
 
             <StackLayout  HorizontalOptions="FillAndExpand" VerticalOptions="End">

@@ -83,17 +83,23 @@ namespace App2
             btnQR.IsVisible = Settings.Permission;
             lblTitle2.Text = "Celkově bodů: " + ClearedPoints + " / " + GetTotalPoints();
 
-            #region Header
             parent.Children.Clear();
-            StackLayout header = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand };
-            header.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 });
-            header.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Center });
-            header.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.Center });
-            parent.Children.Add(header);
+            #region Header
+
+            parent.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 },0,0);
+            parent.Children.Add(new Label { Text = "Image", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity = 0 }, 1, 0);
+            parent.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start }, 2, 0);
+            parent.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.End }, 3, 0);
+
             #endregion
 
-            foreach (Stand stand in stands)
-                parent.Children.Add(stand.GetStackLayout());
+
+            for (int y = 0; y < stands.Count; y++)
+            {
+                List<View> list = stands[y].AddRow();
+                for (int x = 0; x < list.Count; x++)
+                    parent.Children.Add(list[x], x, y);
+            }
                 
         }
 

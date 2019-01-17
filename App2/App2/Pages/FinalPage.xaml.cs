@@ -5,7 +5,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using MailKit.Net.Smtp;
 using MimeKit;
-
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
 
 namespace App2.Pages
 {
@@ -91,11 +92,13 @@ namespace App2.Pages
             catch (MailKit.ServiceNotConnectedException ex)
             {
                 DisplayAlert("Web Error", ex.Message, "Ok");
+                Crashes.TrackError(ex);
                 return;
             }
-            catch (Exception )
+            catch (Exception ex)
             {
                 DisplayAlert("Chyba", "Data nebyla odeslána. Jste připojení k internetu?", "Ok");
+                Crashes.TrackError(ex);
                 return;
             }
 

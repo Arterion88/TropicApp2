@@ -48,10 +48,10 @@ namespace App2
 
             List<View> list = new List<View>
             {
-                new Label { Text = "\u2713", FontSize = fontSize, HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color, Opacity = Visited ? 1 : 0 },
-                new Image { Source = source, BackgroundColor = Color.Black, Aspect = Aspect.AspectFit, VerticalOptions = LayoutOptions.Center ,HeightRequest=20},
-                new Label { Text = this.Text, FontSize = fontSize, HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start, TextColor = color },
-                new Label { Text = Points.ToString(), FontSize = fontSize, HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.Start, TextColor = color }
+                new Label { Text = "\u2713", FontSize = fontSize, HorizontalOptions = LayoutOptions.Start, VerticalTextAlignment=TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color, Opacity = Visited ? 1 : 0 },
+                new Image { Source = source, BackgroundColor = Color.Black, Aspect = Aspect.AspectFit, VerticalOptions = LayoutOptions.Start ,HeightRequest=20},
+                new Label { Text = this.Text, FontSize = fontSize, HorizontalOptions = LayoutOptions.FillAndExpand, VerticalTextAlignment=TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color },
+                new Label { Text = Points.ToString(), FontSize = fontSize, HorizontalOptions = LayoutOptions.End, VerticalTextAlignment=TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color }
             };
 
             return list;

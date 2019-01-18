@@ -42,11 +42,18 @@ namespace App2
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-            Settings.Stands = string.Empty;
-            string[] array = Settings.Stands.Split(';');
-            for (int i = 0; i < array.Length; i++)
-                if (int.TryParse(array[i].Split('.')[1], out int result))
-                    stands[result].Visited = true;
+
+            if (Settings.Stands != string.Empty)
+            {
+                string[] array = Settings.Stands.Split(';');
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (array == null)
+                        break;
+                    if (int.TryParse(array[i].Split('.')[1], out int result))
+                        stands[result].Visited = true;
+                }
+            }   
 
             this.BackgroundColor = Settings.BackgroundColor;
             Show();
@@ -109,7 +116,7 @@ namespace App2
 
             Settings.Stands += Settings.CurrentEvent.Id+"."+stands.IndexOf(stand) + ";";
             if (!stands.Exists(x => !x.Visited))
-                Submit();
+                BtnSubmit_Clicked(null,null);
             Show();
 
         }
@@ -136,7 +143,7 @@ namespace App2
             {
                 var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Camera);
                 var status = PermissionStatus.Unknown;
-                //Best practice to always check that the key exists
+                
                 if (results.ContainsKey(Permission.Camera))
                     status = results[Permission.Camera];
                 if (status != PermissionStatus.Granted)
@@ -157,11 +164,6 @@ namespace App2
 
         private void BtnSubmit_Clicked(object sender, EventArgs e)
         {
-            Submit();
-        }
-
-        private void Submit()
-        {
             FinalPage finalPage = new FinalPage(ClearedPoints, GetTotalPoints());
             finalPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.Black);
             Navigation.PushAsync(finalPage);
@@ -179,11 +181,9 @@ namespace App2
 
         private void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
             pickerIndex = picker.SelectedIndex == 0 ? stands.Count : int.Parse(picker.Items[picker.SelectedIndex]);
             pageIndex = 0;
             Show();
-            
         }
     }
 }

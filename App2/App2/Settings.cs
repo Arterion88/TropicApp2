@@ -31,15 +31,6 @@ namespace App2
 
         public const string imgFolder = "Images/";
 
-        #region Saveable
-        private static ISettings AppSettings
-        {
-            get
-            {
-                return CrossSettings.Current;
-            }
-        }
-        
         public static async Task<bool> DownloadFile(Page page)
         {
             string serverPath = Server + "AppEvents.xml";
@@ -47,32 +38,28 @@ namespace App2
             request.Method = WebRequestMethods.File.DownloadFile;
 
             // Read the file from the server & write to destination  
-            
+
             try
             {
                 using (WebResponse response = request.GetResponse())
-                return await ProcessFile(response.GetResponseStream(), page);
+                    return await ProcessFile(response.GetResponseStream(), page);
             }
             catch (WebException ex)
             {
                 await page.DisplayAlert("Chyba", "Jste připojení k internetu?", "Ok");
-                Crashes.TrackError(ex);  
+                Crashes.TrackError(ex);
                 return false;
             }
-            
+
         }
 
         public static Stream DownloadImage(string imagePath)
         {
-            //await page.DisplayAlert("PushEnabled", (await Microsoft.AppCenter.Push.Push.IsEnabledAsync()).ToString(), "Ok");
-            //await DisplayAlert("Now",DateTime.Now.ToString(),"Ok");
-
             string serverPath = Server + imgFolder + imagePath;
 
             WebRequest request = WebRequest.Create(serverPath);
-            
+
             request.Method = WebRequestMethods.File.DownloadFile;
-            
 
             // Read the file from the server & write to destination  
             try
@@ -108,9 +95,8 @@ namespace App2
                     Event event1 = new Event(node);
 
                     if (DateTime.Now < event1.To)
-                    if (!Settings.FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
-                        Events.Add(event1);
-
+                        if (!Settings.FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
+                            Events.Add(event1);
                 }
                 if (Events.Count < 0)
                 {
@@ -127,6 +113,16 @@ namespace App2
             }
 
             return true;
+        }
+
+        #region Saveable
+
+        private static ISettings AppSettings
+        {
+            get
+            {
+                return CrossSettings.Current;
+            }
         }
 
         #region Setting Constants

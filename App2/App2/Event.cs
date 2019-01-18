@@ -17,9 +17,7 @@ namespace App2
         {
             Id = int.Parse(node.Attributes["Id"].Value);
             Name = node.Attributes["Name"].Value;
-
-            //From = DateTime.Parse(node["From"].InnerText);
-            //To = DateTime.Parse(node.Attributes["Name"].Value);
+            To = DateTime.Parse(node.Attributes["To"].Value);
             foreach (XmlNode stand in node["Stands"].ChildNodes)
                 Stands.Add(new Stand(stand));
         }

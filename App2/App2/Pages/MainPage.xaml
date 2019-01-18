@@ -10,15 +10,17 @@
             <Label x:Name="lblTitle2" 
                Margin="0,20,0,0"
                HorizontalOptions="Center"/>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                <Label Text="Počet řádků: " HorizontalOptions="Start"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="20,0,20,0">
+                <Label Text="Počet řádků: " HorizontalOptions="Start" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="22"/>
                 <Picker x:Name="picker" SelectedIndexChanged="Picker_SelectedIndexChanged" HorizontalOptions="FillAndExpand" SelectedIndex="1">
                     <Picker.Items>
                         <x:String>Vše</x:String>
-                        <x:String>5</x:String>
+                         <x:String>5</x:String>
                         <x:String>10</x:String>
                         <x:String>15</x:String>
                         <x:String>20</x:String>
+                        <x:String>25</x:String>
+                        <x:String>50</x:String>
                     </Picker.Items>
                 </Picker>
             </StackLayout>
@@ -34,7 +36,7 @@
                     </Grid.ColumnDefinitions>
                 </Grid>
             </Frame>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="20,0,20,0">
                 <Button x:Name="btnPageBack" Text="Zpět"  Clicked="BtnPage_Clicked" HorizontalOptions="StartAndExpand"/>
                 <Button x:Name="btnPageNext" Text="Další" Clicked="BtnPage_Clicked" HorizontalOptions="EndAndExpand"/>
             </StackLayout>
@@ -43,7 +45,7 @@
                 <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="End">
 
                     <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" Margin="30,0,30,0">
-                        <Label Text="Napište kód:" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End" Margin="0,0,30,0"/>
+                        <Label Text="Napište kód:" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End" Margin="0,0,30,0" FontSize="22"/>
                         <Entry x:Name="editPass" HorizontalOptions="FillAndExpand"  />
                     </StackLayout>
 

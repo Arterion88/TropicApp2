@@ -15,14 +15,6 @@ namespace App2.Pages
 	{
         int Visited;
 
-        protected override void OnAppearing()
-        {
-            //if (Settings.FinishedEvents.Split(';').ToList().Contains(Settings.CurrentEvent.Id.ToString()))
-            //    Navigation.PushAsync(new SelectPage());
-            base.OnAppearing();
-
-        }
-
         public FinalPage(int visited, int total)
         {
             Visited = visited;
@@ -33,33 +25,21 @@ namespace App2.Pages
                         + "Vaše skóre: " + visited + "/" + total + Environment.NewLine + Environment.NewLine
                         + "Pro zařazení do soutěže prosím vyplňte informace na následující řádek a odešlete.";
             this.BackgroundColor = Settings.BackgroundColor;
-
         }
 
         private void Edit_Focused(object sender, FocusEventArgs e) => ((Entry)sender).BackgroundColor = Color.Default;
 
-        bool IsValidEmail(string email)
-        {
-            try
-            {
-                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
-                return true;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
-        }
-
         public void BtnSubmit_Clicked(object sender, EventArgs e)
         {
-            //if (FormValidation())
+            //if (FormValidation()) //TODO: Remove comments
             //    return;
+
+            #region WriteMessage
             string msg = "Jméno: " + editName.Text + Environment.NewLine +
-                             "Příjmení: " + editName2.Text + Environment.NewLine +
-                             "Email: " + editMail.Text + Environment.NewLine +
-                             "Telefon: " + editPhone.Text + Environment.NewLine +
-                             "Počet bodů: " + Visited;
+                                 "Příjmení: " + editName2.Text + Environment.NewLine +
+                                 "Email: " + editMail.Text + Environment.NewLine +
+                                 "Telefon: " + editPhone.Text + Environment.NewLine +
+                                 "Počet bodů: " + Visited;
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("tropicliberec.h@gmail.com"));
             message.To.Add(new MailboxAddress("holan@tropicliberec.cz"));
@@ -69,7 +49,9 @@ namespace App2.Pages
             {
                 Text = msg
             };
+            #endregion
 
+            #region SendEmail
             try
             {
                 using (var client = new SmtpClient())
@@ -85,23 +67,17 @@ namespace App2.Pages
                 //DisplayAlert("", "", "Ok");
 
                 Settings.FinishedEvents += Settings.CurrentEvent.Id.ToString() + ";";
+                List<string> list = Settings.Stands.Split('.').ToList();
+                list.RemoveAll(x => x.StartsWith(Settings.CurrentEvent.Id + "."));
                 Navigation.PushAsync(new TitlePage());
-
-
-            }
-            catch (MailKit.ServiceNotConnectedException ex)
-            {
-                DisplayAlert("Web Error", ex.Message, "Ok");
-                Crashes.TrackError(ex);
-                return;
             }
             catch (Exception ex)
             {
                 DisplayAlert("Chyba", "Data nebyla odeslána. Jste připojení k internetu?", "Ok");
                 Crashes.TrackError(ex);
                 return;
-            }
-
+            } 
+            #endregion
         }
 
         private bool FormValidation()
@@ -110,7 +86,8 @@ namespace App2.Pages
 
             List<View> arrEntry = gridFrm.Children.Where(x => x.GetType() == typeof(Entry)).ToList();
             arrEntry.Remove(editPhone);
-            bool missing = false;
+
+            bool missing = false; //True if any entry is missing value
             foreach (View view in arrEntry)
             {
                 Entry entry = (Entry)view;
@@ -125,21 +102,37 @@ namespace App2.Pages
                 DisplayAlert("Chybějící údaje", "Vyplňte prosím chybějící údaje!", "Ok");
                 return true;
             }
-
+            if (IsValidEmail(editMail.Text))
+            {
+                DisplayAlert("Neplatný email", "Zadaný e-mail není platný", "Ok");
+                return true;
+            }
             if (editMail.Text != editMail2.Text)
             {
-                DisplayAlert("Neschodné emaily", "Email se neschoduje s emailem zadaným pro potvrzení. Překontrolujte si prosím vložené emaily", "Ok");
+                DisplayAlert("Neschodné emaily", "E-mail se neschoduje s e-mailem zadaným pro potvrzení. Překontrolujte si prosím vložené e-maily", "Ok");
                 return true;
             }
 
             return false;
         }
 
-        private void BtnBack_Clicked(object sender, EventArgs e)
+        bool IsValidEmail(string email)
         {
-            Navigation.PopAsync();
+            try
+            {
+                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
+        private void BtnBack_Clicked(object sender, EventArgs e) => Navigation.PopAsync();
+
         private void Switch_Toggled(object sender, ToggledEventArgs e) => btnSubmit.IsEnabled = ((Xamarin.Forms.Switch)sender).IsToggled;
+
+        
     }
 }

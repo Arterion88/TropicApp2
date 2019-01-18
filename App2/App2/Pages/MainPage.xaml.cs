@@ -1,4 +1,5 @@
 ﻿using App2.Pages;
+using Microsoft.AppCenter.Crashes;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
@@ -11,8 +12,9 @@ namespace App2
 {
     public partial class MainPage : ContentPage
     {
+        #region Variables
         List<Stand> stands = Settings.CurrentEvent.Stands;
-        int pickerIndex=5,pageIndex=0;
+        int pickerIndex = 5, pageIndex = 0;
         int ClearedPoints
         {
             get
@@ -29,30 +31,21 @@ namespace App2
 
         private int GetTotalPoints()
         {
-
             int value = 0;
             foreach (Stand item in stands)
                 value += item.Points;
             return value;
-        }
-
-        protected override void OnAppearing()
-        {
-            //if (Settings.FinishedEvents.Split(';').ToList().Contains(Settings.CurrentEvent.Id.ToString()))
-            //    Navigation.PushAsync(new TitlePage());
-            //DisplayAlert("Test","Test","cancel");
-            base.OnAppearing();
-
-        }
+        } 
+        #endregion
 
         public MainPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-
+            Settings.Stands = string.Empty;
             string[] array = Settings.Stands.Split(';');
             for (int i = 0; i < array.Length; i++)
-                if (int.TryParse(array[i], out int result))
+                if (int.TryParse(array[i].Split('.')[1], out int result))
                     stands[result].Visited = true;
 
             this.BackgroundColor = Settings.BackgroundColor;
@@ -63,7 +56,6 @@ namespace App2
         {
             btnQR.IsVisible = Settings.Permission;
             lblTitle2.Text = "Celkově bodů: " + ClearedPoints + " / " + GetTotalPoints();
-            
             if (picker.SelectedIndex == 0)
                 btnPageBack.IsVisible = btnPageNext.IsVisible = false;
             else
@@ -72,8 +64,8 @@ namespace App2
                     picker.SelectedIndex = 1;
                 btnPageBack.IsVisible = !(pageIndex == 0);
                 btnPageNext.IsVisible = !(pageIndex == stands.Count / int.Parse(picker.Items[picker.SelectedIndex]));
-            }
-            
+            } 
+
             List<string> test = picker.Items.ToList();
             parent.Children.Clear();
 
@@ -87,11 +79,7 @@ namespace App2
             #endregion
 
             int start = pageIndex * pickerIndex;
-
-            
-
             int max = picker.SelectedIndex == 0 ? stands.Count : int.Parse(picker.Items[picker.SelectedIndex]);
-
 
             for (int y = start; y < Math.Min(start+max,stands.Count); y++)
             {
@@ -99,12 +87,11 @@ namespace App2
                 for (int x = 0; x < list.Count; x++)
                     parent.Children.Add(list[x], x, y-start);
             }
-                
         }
 
         public void CheckCode(string result)
         {
-            editPass.Text = "";
+            editPass.Text = string.Empty;
 
             if (!stands.Exists(x => x.Pass == result))
             {
@@ -120,7 +107,7 @@ namespace App2
             }
             stand.Visited = true;
 
-            Settings.Stands += stands.IndexOf(stand) + ";";
+            Settings.Stands += Settings.CurrentEvent.Id+"."+stands.IndexOf(stand) + ";";
             if (!stands.Exists(x => !x.Visited))
                 Submit();
             Show();
@@ -161,7 +148,8 @@ namespace App2
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Test", ex.Message, "Ok");
+                await DisplayAlert("Chyba", ex.Message, "Ok");
+                Crashes.TrackError(ex);
                 return false;
             }
             return true;

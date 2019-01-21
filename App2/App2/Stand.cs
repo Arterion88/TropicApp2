@@ -38,7 +38,7 @@ namespace App2
         public List<View> AddRow()
         {
             Color color = Visited? Color.Green:Color.Default;
-            double fontSize = 20;
+            double fontSize = 25;
 
             //StackLayout stack = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand };
             //stack.Children.Add(new Label { Text = "\u2713", FontSize = fontSize, HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color, Opacity = Visited ? 1 : 0 });
@@ -49,8 +49,8 @@ namespace App2
             List<View> list = new List<View>
             {
                 new Label { Text = "\u2713", FontSize = fontSize, HorizontalOptions = LayoutOptions.Start,VerticalOptions=LayoutOptions.Center, VerticalTextAlignment=TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Start, TextColor = color, Opacity = Visited ? 1 : 0 },
-                new Image { Source = source, BackgroundColor = Color.Black, Aspect = Aspect.AspectFit, VerticalOptions = LayoutOptions.Center ,HeightRequest=22},
                 new Label { Text = this.Text, FontSize = fontSize, HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions=LayoutOptions.Center, VerticalTextAlignment=TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color },
+                new Image { Source = source, Aspect = Aspect.AspectFit, VerticalOptions = LayoutOptions.Center ,HeightRequest=30},
                 new Label { Text = Points.ToString(), FontSize = fontSize, HorizontalOptions = LayoutOptions.End, VerticalOptions=LayoutOptions.Center, VerticalTextAlignment=TextAlignment.Start, HorizontalTextAlignment = TextAlignment.Start, TextColor = color }
             };
 

@@ -45,16 +45,23 @@ namespace App2
 
             if (Settings.Stands != string.Empty)
             {
-                string[] array = Settings.Stands.Split(';');
-                for (int i = 0; i < array.Length; i++)
+                var array = Settings.Stands.Split(';');
+                for (int i = 0; i < array.Length-1; i++)
                 {
                     if (array == null)
                         break;
-                    if (int.TryParse(array[i].Split('.')[1], out int result))
-                        stands[result].Visited = true;
+                    int eventId = int.Parse(array[i].Split('.')[0]);
+                    int standId = int.Parse(array[i].Split('.')[1]);
+                    if (Settings.Events.Find(x => x.Id == eventId) == null)
+                        Settings.Stands.Replace(array[i], "");
+                    try
+                    {
+                        stands[standId].Visited = true;
+                    }
+                    catch (Exception){}
+                    
                 }
             }   
-
             this.BackgroundColor = Settings.BackgroundColor;
             Show();
         }
@@ -74,14 +81,28 @@ namespace App2
             } 
 
             List<string> test = picker.Items.ToList();
+
             parent.Children.Clear();
+            //parent = new Grid() {
+            //    HorizontalOptions = LayoutOptions.FillAndExpand,
+            //    VerticalOptions = LayoutOptions.FillAndExpand,
+            //    ColumnDefinitions =
+            //    {
+            //        new ColumnDefinition() { Width = GridLength.Auto },
+            //        new ColumnDefinition() { Width = GridLength.Star },
+            //        new ColumnDefinition() { Width = GridLength.Auto },
+            //        new ColumnDefinition() { Width = GridLength.Auto },
+            //    },
+            //    ColumnSpacing = 0,
+            //    RowSpacing = 0
+            //};
 
             #region Header
 
-            //parent.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 },0,0);
-            //parent.Children.Add(new Label { Text = "Image", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity = 0 }, 1, 0);
-            //parent.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start }, 2, 0);
-            //parent.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.End }, 3, 0);
+            parent.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 },0,0);
+            parent.Children.Add(new Label { Text = "Image", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity = 0 }, 1, 0);
+            parent.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start }, 2, 0);
+            parent.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.End }, 3, 0);
 
             #endregion
 
@@ -91,7 +112,7 @@ namespace App2
             for (int y = start; y < Math.Min(start+max,stands.Count); y++)
             {
                 List<View> list = stands[y].AddRow();
-                for (int x = 0; x < list.Count; x++)
+                for (int x = 1; x < list.Count; x++)
                     parent.Children.Add(list[x], x, y-start);
             }
         }

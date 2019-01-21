@@ -7,7 +7,8 @@
     <ScrollView>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
             <!-- Place new controls here -->
-            <Label x:Name="lblTitle2" 
+            <Label x:Name="lblTitle2"
+                   FontSize="22"
                Margin="0,20,0,0"
                HorizontalOptions="Center"/>
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="20,0,20,0">
@@ -24,7 +25,7 @@
                     </Picker.Items>
                 </Picker>
             </StackLayout>
-            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10,0,10,0">
+            <Frame x:Name="frame" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10,0,10,0">
                 <Grid x:Name="parent"
                          HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand">
@@ -46,7 +47,7 @@
 
                     <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" Margin="30,0,30,0">
                         <Label Text="Napište kód:" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End" Margin="0,0,30,0" FontSize="22"/>
-                        <Entry x:Name="editPass" HorizontalOptions="FillAndExpand"  />
+                        <Entry x:Name="editPass" HorizontalOptions="FillAndExpand"/>
                     </StackLayout>
 
                 </StackLayout>

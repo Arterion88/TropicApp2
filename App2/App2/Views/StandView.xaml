@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App2.Views.StandView"
+             x:Name="this">
+  <ContentView.Content>
+        <ListView>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Label 
+                                Text="\u2713"
+                                Font="22"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center"
+                                HorizontalTextAlignment="Start"
+                                TextColor="{Binding TextColor}"
+                                Opacity="{Binding Opacity}"/>
+                            <Label
+                                Text="{Binding Text}"
+                                Font="22"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="Center"
+                                HorizontalTextAlignment="Start"
+                                TextColor="{Binding TextColor}"/>
+                            <Image
+                                Source="{Binding Source}"
+                                Aspect="AspectFit"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center"
+                                HeightRequest="30"/>
+                            <Label
+                                Text="{Binding PointsString}"
+                                FontSize="22"
+                                VerticalOptions="Center"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Start"
+                                HorizontalOptions="End"
+                                TextColor="{Binding TextColor}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+  </ContentView.Content>
+</ContentView>

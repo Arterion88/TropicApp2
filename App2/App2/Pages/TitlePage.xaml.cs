@@ -19,19 +19,16 @@ namespace App2.Pages
         {        
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-            DateTime date = DateTime.Parse("18/1/2019 10:18");
-            this.BackgroundColor = Settings.BackgroundColor;
         }
 
         private async void BtnNext_Clicked(object sender, EventArgs e)
         {
-            if (await Settings.DownloadFile(this))
-                if (Settings.Events.Count == 0)
-                    await DisplayAlert("Žádné soutěže","V tuto chvíly nejsou dostupné žádné soutěže.","Ok");
-                else
-                    await Navigation.PushAsync(new MainPage());
+            if (Settings.Events.Count>0)
+                await Navigation.PushAsync(new MainPage());
+            else
+                await DisplayAlert("Žádné soutěže", "V tuto chvíly nejsou dostupné žádné soutěže.", "Ok");
+            
         }
 
-        
     }
 }

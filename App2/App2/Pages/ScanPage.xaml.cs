@@ -20,7 +20,6 @@ namespace App2.Pages
             };
             zxing.OnScanResult += (result) =>
             {
-
                 zxing.Unfocus();
                 zxing.IsScanning = false;
                 zxing.IsAnalyzing = false;

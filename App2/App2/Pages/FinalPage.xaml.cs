@@ -7,6 +7,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
+using System.Net.Mail;
 
 namespace App2.Pages
 {
@@ -35,36 +36,43 @@ namespace App2.Pages
             //    return;
 
             #region WriteMessage
-            string msg = "Jméno: " + editName.Text + Environment.NewLine +
-                                 "Příjmení: " + editName2.Text + Environment.NewLine +
-                                 "Email: " + editMail.Text + Environment.NewLine +
-                                 "Telefon: " + editPhone.Text + Environment.NewLine +
-                                 "Počet bodů: " + Visited;
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("tropicliberec.h@gmail.com"));
-            message.To.Add(new MailboxAddress("holan@tropicliberec.cz"));
-            message.Subject = "Tropic - Soutěž";
-
-            message.Body = new TextPart("plain")
+            string msg = "Jméno:" + editName.Text + Environment.NewLine +
+                         "Příjmení:" + editName2.Text + Environment.NewLine +
+                         "Email:" + editMail.Text + Environment.NewLine +
+                         "Telefon:" + editPhone.Text + Environment.NewLine +
+                         "Počet bodů:" + Visited;
+            MailMessage message;
+            try
             {
-                Text = msg
-            };
+                message = new MailMessage()
+                {
+                    From = new MailAddress("tropicliberec.h@gmail.com"),
+                    To = {new MailAddress("holan@tropicliberec.cz")},
+                    Subject = "Tropic - Soutěž",
+                    Body = msg
+                };
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Chyba", ex.ToString(),"Ok");
+                return;
+            }
+            
             #endregion
 
             #region SendEmail
             try
             {
-                using (var client = new SmtpClient())
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
                     client.Connect("smtp.gmail.com", 587);
                     client.SslProtocols = System.Security.Authentication.SslProtocols.Default;
 
                     client.Authenticate("tropicliberec.h@gmail.com", "tropic213021");
-
-                    client.Send(message);
+                    client.Send((MimeMessage)message);
                     client.Disconnect(true);
                 }
-                //DisplayAlert("", "", "Ok");
+
 
                 Settings.FinishedEvents += Settings.CurrentEvent.Id.ToString() + ";";
                 List<string> list = Settings.Stands.Split('.').ToList();
@@ -73,7 +81,8 @@ namespace App2.Pages
             }
             catch (Exception ex)
             {
-                DisplayAlert("Chyba", "Data nebyla odeslána. Jste připojení k internetu?", "Ok");
+                DisplayAlert("Chyba", ex.Message, "Ok");
+                DisplayAlert("Chyba", ex.InnerException.Message, "Ok");
                 Crashes.TrackError(ex);
                 return;
             } 

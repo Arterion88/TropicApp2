@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:App2"
-             x:Class="App2.MainPage">
+             xmlns:viev="clr-namespace:App2.Views"
+             x:Class="App2.MainPage"
+             BackgroundColor="{Binding Source={x:Static App2:Settings.BackgroundColor}}">
 
     <ScrollView>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
@@ -11,12 +13,30 @@
                    FontSize="22"
                Margin="0,20,0,0"
                HorizontalOptions="Center"/>
+            
+            <StackLayout  HorizontalOptions="FillAndExpand" VerticalOptions="End">
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="End">
+
+                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" Margin="10,0,10,0">
+                        <Label Text="Kód:" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End" Margin="0,0,10,0" FontSize="22"/>
+                        <Entry x:Name="editPass" HorizontalOptions="FillAndExpand"/>
+                        <Button Text="Vložit"  x:Name="btnCode" Clicked="BtnCode_Clicked" VerticalOptions="End" HorizontalOptions="End"/>
+                    </StackLayout>
+
+                </StackLayout>
+                
+                <StackLayout Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="End" Margin="10,0,10,0">
+                    <Button Text="Scan" x:Name="btnQR" Clicked="BtnQR_Clicked"/>
+                    
+                </StackLayout>
+                <Button Text="Poslat výsledek" x:Name="btnSubmit" Clicked="BtnSubmit_Clicked"/>
+            </StackLayout>
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="20,0,20,0">
-                <Label Text="Počet řádků: " HorizontalOptions="Start" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="22"/>
-                <Picker x:Name="picker" SelectedIndexChanged="Picker_SelectedIndexChanged" HorizontalOptions="FillAndExpand" SelectedIndex="1">
+                <Label Text="Zobrazit řádků: " HorizontalOptions="StartAndExpand" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="16"/>
+                <Picker x:Name="picker" SelectedIndexChanged="Picker_SelectedIndexChanged" HorizontalOptions="FillAndExpand" SelectedIndex="1" >
                     <Picker.Items>
                         <x:String>Vše</x:String>
-                         <x:String>5</x:String>
+                        <x:String>5</x:String>
                         <x:String>10</x:String>
                         <x:String>15</x:String>
                         <x:String>20</x:String>
@@ -25,7 +45,11 @@
                     </Picker.Items>
                 </Picker>
             </StackLayout>
-            <Frame x:Name="frame" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10,0,10,0">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="20,0,20,0">
+                <Button x:Name="btnPageBack" Text="Zpět"  Clicked="BtnPage_Clicked" HorizontalOptions="StartAndExpand"/>
+                <Button x:Name="btnPageNext" Text="Další" Clicked="BtnPage_Clicked" HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+            <Frame x:Name="frame" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10,0,10,10">
                 <Grid x:Name="parent"
                          HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand">
@@ -36,28 +60,12 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                 </Grid>
+            
+
             </Frame>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="20,0,20,0">
-                <Button x:Name="btnPageBack" Text="Zpět"  Clicked="BtnPage_Clicked" HorizontalOptions="StartAndExpand"/>
-                <Button x:Name="btnPageNext" Text="Další" Clicked="BtnPage_Clicked" HorizontalOptions="EndAndExpand"/>
-            </StackLayout>
+            
 
-            <StackLayout  HorizontalOptions="FillAndExpand" VerticalOptions="End">
-                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="End">
-
-                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" Margin="30,0,30,0">
-                        <Label Text="Napište kód:" HorizontalOptions="Start" VerticalTextAlignment="Center" HorizontalTextAlignment="End" Margin="0,0,30,0" FontSize="22"/>
-                        <Entry x:Name="editPass" HorizontalOptions="FillAndExpand"/>
-                    </StackLayout>
-
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" VerticalOptions="End">
-                    <Button Text="Scan" x:Name="btnQR" Clicked="BtnQR_Clicked"/>
-                    <Button Text="Vložit kód"  x:Name="btnCode" Clicked="BtnCode_Clicked" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
-                </StackLayout>
-                <Button Text="Poslat výsledek" x:Name="btnSubmit" Clicked="BtnSubmit_Clicked"/>
-            </StackLayout>
+            
         </StackLayout>
     </ScrollView>
 

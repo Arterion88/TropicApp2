@@ -17,7 +17,10 @@ namespace App2
         {
             InitializeComponent();
 
+
             MainPage = new NavigationPage(new TitlePage());
+            Settings.ProcessXml(MainPage);
+
             MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.Black);
         }
 

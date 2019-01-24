@@ -19,7 +19,7 @@ namespace App2
         //Todo: Add proguard.cfg https://docs.microsoft.com/en-us/appcenter/sdk/push/xamarin-android
 
         public static Color BackgroundColor { get { return Color.LightBlue; } }
-        public static Event CurrentEvent { get; set; }
+        public static Event CurrentEvent { get; set; } = new Event();
         public static List<Event> Events = new List<Event>();
         public const string Version = "0.9.5";
 
@@ -28,30 +28,8 @@ namespace App2
         public const string FtpPassword = "fCqjHlmqgB54";
 
         public const string Server = "http://app.tropicnews.eu/QRApp/";
-
-        public const string imgFolder = "Images/";
-
-        public static async Task<bool> DownloadFile(Page page)
-        {
-            string serverPath = Server + "AppEvents.xml";
-            WebRequest request = WebRequest.Create(serverPath);
-            request.Method = WebRequestMethods.File.DownloadFile;
-
-            // Read the file from the server & write to destination  
-
-            try
-            {
-                using (WebResponse response = request.GetResponse())
-                    return await ProcessFile(response.GetResponseStream(), page);
-            }
-            catch (WebException ex)
-            {
-                await page.DisplayAlert("Chyba", "Jste připojení k internetu?", "Ok");
-                Crashes.TrackError(ex);
-                return false;
-            }
-
-        }
+        public const string XmlPath = Server + "AppEvents.xml";
+        public const string imgFolder = Server+"Images/";
 
         public static Stream DownloadImage(string imagePath)
         {
@@ -74,45 +52,78 @@ namespace App2
             }
         }
 
-        private static async Task<bool> ProcessFile(Stream xml, Page page)
+        private static XmlDocument LoadXml(Page page)
         {
+            XmlDocument doc = new XmlDocument();
             try
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(xml);
-                XmlNode versionNode = doc.GetElementsByTagName("Version")[0];
-                if (versionNode.Attributes["number"].Value != Settings.Version)
-                {
-                    if (!await page.DisplayAlert("Nová verze aplikace", "Nová verze k dispozici. Chcete přesměrovat na stránky na stažení nové verze?", "Ne", "Ano"))
-                    {
-                        Device.OpenUri(new Uri(versionNode.Attributes["link"].Value));
-                        return false;
-                    }
-                    //return false;
-                }
+                doc.Load(XmlPath);
+                return doc;
+            }
+            catch (Exception ex)
+            {
+                page.DisplayAlert("Chyba", ex.Message, "Ok");
+                Crashes.TrackError(ex);
+                return null;
+            }
+            
+        }
+
+        public static bool ProcessXml(Page page)
+        {
+            XmlDocument doc = LoadXml(page);
+            if (doc == null)
+                return false;
+            try
+            {
                 foreach (XmlNode node in doc.GetElementsByTagName("Event"))
                 {
                     Event event1 = new Event(node);
 
                     if (DateTime.Now < event1.To)
-                        if (!Settings.FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
+                        if (!FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
                             Events.Add(event1);
                 }
-                if (Events.Count < 0)
-                {
-                    await page.DisplayAlert("Žádná soutěž", "V tuto chvíli neběží žádná aktuální soutěž", "Ok");
-                    return false;
-                }
-                Settings.CurrentEvent = Events[0];
+                CurrentEvent = Events[0];
             }
             catch (Exception ex)
             {
-                await page.DisplayAlert("Chyba", ex.Message, "Ok");
+                page.DisplayAlert("Chyba", ex.Message, "Ok");
                 Crashes.TrackError(ex);
-                throw;
-            }
 
+            }
             return true;
+        }
+        
+
+        public static async Task<bool> CheckEvent(Page page)
+        {
+            XmlDocument doc = LoadXml(page);
+            if (doc == null)
+                return false;
+
+            #region Check new version
+            XmlNode versionNode = doc.GetElementsByTagName("Version")[0];
+            if (versionNode.Attributes["number"].Value != Version)
+            {
+                if (!await page.DisplayAlert("Nová verze aplikace", "Nová verze k dispozici. Chcete přesměrovat na stránky na stažení nové verze?", "Ne", "Ano"))
+                {
+                    Device.OpenUri(new Uri(versionNode.Attributes["link"].Value));
+                    return false;
+                }
+            } 
+            #endregion
+
+            #region Check if event is available
+            int count = 0;
+            foreach (XmlNode node in doc.GetElementsByTagName("Event"))
+            {
+                if (DateTime.Now < DateTime.Parse(node.Attributes["To"].Value))
+                    if (!FinishedEvents.Split(';').ToList().Contains(node.Attributes["Id"].Value))
+                        count++;
+            }
+            return count > 0; 
+            #endregion
         }
 
         #region Saveable
@@ -131,6 +142,7 @@ namespace App2
         private const string KeyStands = "stands";
         private const string KeyPermission = "permission";
         private const string KeyFinishedEvents = "finishedevents";
+        private const string KeyPickerIndex = "pickerindex";
 
         #endregion
 
@@ -169,6 +181,18 @@ namespace App2
                 AppSettings.AddOrUpdateValue(KeyPermission, value);
             }
         } 
+
+        public static int PickerSelectedIndex
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(KeyPickerIndex, 1);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(KeyPickerIndex, value);
+            }
+        }
 
         #endregion
     }

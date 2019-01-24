@@ -4,7 +4,9 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -13,89 +15,67 @@ namespace App2
     public partial class MainPage : ContentPage
     {
         #region Variables
-        List<Stand> stands = Settings.CurrentEvent.Stands;
-        int pickerIndex = 5, pageIndex = 0;
-        int ClearedPoints
-        {
-            get
-            {
-                int value = 0;
-                foreach (Stand item in stands)
-                {
-                    if (item.Visited)
-                        value += item.Points;
-                }
-                return value;
-            }
-        }
 
-        private int GetTotalPoints()
-        {
-            int value = 0;
-            foreach (Stand item in stands)
-                value += item.Points;
-            return value;
-        } 
+        List<Stand> stands = Settings.CurrentEvent.Stands;
+        public int PickerItem => picker.SelectedIndex == 0 ? stands.Count : int.Parse(picker.Items[picker.SelectedIndex]);
+        int pageIndex = 0;
+        int ClearedPoints => stands.Where(x => x.Visited).Sum(x => x.Points);
+        private int TotalPoints => stands.Sum(x => x.Points);
+
         #endregion
 
         public MainPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
+            //this.BackgroundColor = Settings.BackgroundColor;
 
-            if (Settings.Stands != string.Empty)
+            InitializeGrid();
+
+            picker.SelectedIndex = Settings.PickerSelectedIndex;           
+        }
+
+        private void InitializeGrid()
+        {
+            if (Settings.Stands == string.Empty)
+                return;
+            var array = Settings.Stands.Split(';');
+            for (int i = 0; i < array.Length - 1; i++)
             {
-                var array = Settings.Stands.Split(';');
-                for (int i = 0; i < array.Length-1; i++)
+                if (array == null)
+                    break;
+                var eventArray = array[i].Split('.');
+                int eventId = int.Parse(eventArray[0]);
+                int standId = int.Parse(eventArray[1]);
+
+                if (Settings.Events.Find(x => x.Id == eventId) == null)
+                    Settings.Stands.Replace(array[i], "");
+                try
                 {
-                    if (array == null)
-                        break;
-                    int eventId = int.Parse(array[i].Split('.')[0]);
-                    int standId = int.Parse(array[i].Split('.')[1]);
-                    if (Settings.Events.Find(x => x.Id == eventId) == null)
-                        Settings.Stands.Replace(array[i], "");
-                    try
-                    {
-                        stands[standId].Visited = true;
-                    }
-                    catch (Exception){}
-                    
+                    stands[standId].Visited = true;
                 }
-            }   
-            this.BackgroundColor = Settings.BackgroundColor;
-            Show();
+                catch (Exception) { }
+            }
         }
 
         private void Show()
         {
             btnQR.IsVisible = Settings.Permission;
-            lblTitle2.Text = "Celkově bodů: " + ClearedPoints + " / " + GetTotalPoints();
+            lblTitle2.Text = "Celkově bodů: " + ClearedPoints + " / " + TotalPoints;
             if (picker.SelectedIndex == 0)
                 btnPageBack.IsVisible = btnPageNext.IsVisible = false;
             else
             {
-                if (picker.SelectedIndex == -1)
-                    picker.SelectedIndex = 1;
                 btnPageBack.IsVisible = !(pageIndex == 0);
                 btnPageNext.IsVisible = !(pageIndex == stands.Count / int.Parse(picker.Items[picker.SelectedIndex]));
-            } 
+            }
 
-            List<string> test = picker.Items.ToList();
+            AddItemsToGrid();
+        }
 
+        public void AddItemsToGrid()
+        {
             parent.Children.Clear();
-            //parent = new Grid() {
-            //    HorizontalOptions = LayoutOptions.FillAndExpand,
-            //    VerticalOptions = LayoutOptions.FillAndExpand,
-            //    ColumnDefinitions =
-            //    {
-            //        new ColumnDefinition() { Width = GridLength.Auto },
-            //        new ColumnDefinition() { Width = GridLength.Star },
-            //        new ColumnDefinition() { Width = GridLength.Auto },
-            //        new ColumnDefinition() { Width = GridLength.Auto },
-            //    },
-            //    ColumnSpacing = 0,
-            //    RowSpacing = 0
-            //};
 
             #region Header
 
@@ -104,24 +84,27 @@ namespace App2
             //parent.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start }, 2, 0);
             //parent.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.End }, 3, 0);
 
-            #endregion
+            #endregion           
 
-            int start = pageIndex * pickerIndex;
-            int max = picker.SelectedIndex == 0 ? stands.Count : int.Parse(picker.Items[picker.SelectedIndex]);
+            int start = pageIndex * PickerItem;
+            int end = Math.Min(start + PickerItem, stands.Count);
 
-            for (int y = start; y < Math.Min(start+max,stands.Count); y++)
-            {
-                List<View> list = stands[y].AddRow();
-                for (int x = 0; x < list.Count; x++)
-                    parent.Children.Add(list[x], x, y-start);
-            }
+            for (int y = start; y < end; y++)
+                stands[y].AddRow(parent, y - start);
+
+            int secItem = int.Parse(picker.Items[1]);
+            int difference = end - start;
+
+            if (difference < secItem)
+                for (int y = difference; y < secItem; y++)
+                    Stand.AddEmptyRow(parent, y);
         }
 
         public void CheckCode(string result)
         {
             editPass.Text = string.Empty;
 
-            if (!stands.Exists(x => x.Pass == result))
+            if (!stands.Exists(x => x.Pass == result.ToLower()))
             {
                 DisplayAlert("Chyba", "Tento kód není platný", "Ok");
                 return;
@@ -142,11 +125,7 @@ namespace App2
 
         }
 
-        private void BtnCode_Clicked(object sender, EventArgs e)
-        {
-            CheckCode(editPass.Text);
-            Show();
-        }
+        private void BtnCode_Clicked(object sender, EventArgs e) => CheckCode(editPass.Text);
 
         private async void BtnQR_Clicked(object sender, EventArgs e)
         {
@@ -185,7 +164,7 @@ namespace App2
 
         private void BtnSubmit_Clicked(object sender, EventArgs e)
         {
-            FinalPage finalPage = new FinalPage(ClearedPoints, GetTotalPoints());
+            FinalPage finalPage = new FinalPage(ClearedPoints, TotalPoints);
             finalPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.Black);
             Navigation.PushAsync(finalPage);
         }
@@ -202,7 +181,7 @@ namespace App2
 
         private void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pickerIndex = picker.SelectedIndex == 0 ? stands.Count : int.Parse(picker.Items[picker.SelectedIndex]);
+            Settings.PickerSelectedIndex = picker.SelectedIndex;
             pageIndex = 0;
             Show();
         }

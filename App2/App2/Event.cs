@@ -13,12 +13,17 @@ namespace App2
         //public DateTime From;
         public DateTime To;
 
+        public Event()
+        {
+            
+        }
+
         public Event(XmlNode node)
         {
             Id = int.Parse(node.Attributes["Id"].Value);
             Name = node.Attributes["Name"].Value;
             To = DateTime.Parse(node.Attributes["To"].Value);
-            foreach (XmlNode stand in node["Stands"].ChildNodes)
+            foreach (XmlNode stand in node.ChildNodes)
                 Stands.Add(new Stand(stand));
         }
     }

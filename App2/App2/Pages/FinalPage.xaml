@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App2.Pages.FinalPage"
-             BackgroundColor="{Binding Source={x:Static App2:Settings.BackgroundColor}}">
+             xmlns:local="clr-namespace:App2"
+             BackgroundColor="{x:Static local:Settings.BackgroundColor}">
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>

@@ -94,25 +94,29 @@ namespace App2
             }
             return true;
         }
-        
-
-        public static async Task<bool> CheckEvent(Page page)
+        public static async Task<bool> CheckVersion(Page page)
         {
             XmlDocument doc = LoadXml(page);
             if (doc == null)
-                return false;
+                return true;
 
             #region Check new version
             XmlNode versionNode = doc.GetElementsByTagName("Version")[0];
             if (versionNode.Attributes["number"].Value != Version)
-            {
                 if (!await page.DisplayAlert("Nová verze aplikace", "Nová verze k dispozici. Chcete přesměrovat na stránky na stažení nové verze?", "Ne", "Ano"))
                 {
                     Device.OpenUri(new Uri(versionNode.Attributes["link"].Value));
-                    return false;
+                    return true;
                 }
-            } 
+            return false;
             #endregion
+        }
+
+        public static bool CheckEvents(Page page)
+        {
+            XmlDocument doc = LoadXml(page);
+            if (doc == null)
+                return false;
 
             #region Check if event is available
             int count = 0;
@@ -125,6 +129,8 @@ namespace App2
             return count > 0; 
             #endregion
         }
+
+
 
         #region Saveable
 

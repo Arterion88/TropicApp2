@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:App2"
-             xmlns:viev="clr-namespace:App2.Views"
+
              x:Class="App2.MainPage"
-             BackgroundColor="{Binding Source={x:Static App2:Settings.BackgroundColor}}">
+             BackgroundColor="{x:Static local:Settings.BackgroundColor}">
 
     <ScrollView>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
@@ -52,7 +52,8 @@
             <Frame x:Name="frame" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="10,0,10,10">
                 <Grid x:Name="parent"
                          HorizontalOptions="FillAndExpand"
-                         VerticalOptions="FillAndExpand">
+                         VerticalOptions="FillAndExpand"
+                      >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
@@ -60,7 +61,15 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                 </Grid>
-            
+                <!--<ListView x:Name="parent">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>-->
 
             </Frame>
             

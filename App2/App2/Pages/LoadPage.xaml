@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App2.Pages.LoadPage"
+             xmlns:local="clr-namespace:App2"
+             BackgroundColor="{x:Static local:Settings.BackgroundColor}">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label
+                x:Name="lbl"
+                Text="Applikace se načítá"
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalOptions="CenterAndExpand" />
+
+           
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

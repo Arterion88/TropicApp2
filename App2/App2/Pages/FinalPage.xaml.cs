@@ -32,8 +32,8 @@ namespace App2.Pages
 
         public void BtnSubmit_Clicked(object sender, EventArgs e)
         {
-            //if (FormValidation()) //TODO: Remove comments
-            //    return;
+            if (FormValidation()) //TODO: Remove comments
+                return;
 
             #region WriteMessage
             string msg = "Jméno:" + editName.Text + Environment.NewLine +
@@ -73,11 +73,10 @@ namespace App2.Pages
                     client.Disconnect(true);
                 }
 
-
                 Settings.FinishedEvents += Settings.CurrentEvent.Id.ToString() + ";";
                 List<string> list = Settings.Stands.Split('.').ToList();
                 list.RemoveAll(x => x.StartsWith(Settings.CurrentEvent.Id + "."));
-                Navigation.PushAsync(new TitlePage());
+                Navigation.PushAsync(new LoadPage());
             }
             catch (Exception ex)
             {
@@ -121,6 +120,12 @@ namespace App2.Pages
                 DisplayAlert("Neschodné emaily", "E-mail se neschoduje s e-mailem zadaným pro potvrzení. Překontrolujte si prosím vložené e-maily", "Ok");
                 return true;
             }
+            if (editPhone.Text.Length<9 && editPhone.Text != string.Empty)
+            {
+                DisplayAlert("Neplatené telefoní číslo", "Zadané telefonní číslo má pouze "+editPhone.Text.Length+"!", "Ok"); //TODO: Test
+                return true;
+            }
+
 
             return false;
         }

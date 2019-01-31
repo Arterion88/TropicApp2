@@ -77,6 +77,7 @@ namespace App2
         {
             parent.Children.Clear();
 
+
             #region Header
 
             //parent.Children.Add(new Label { Text = "\u2713", HorizontalOptions = LayoutOptions.Start, HorizontalTextAlignment = TextAlignment.Start, Opacity =  0 },0,0);
@@ -84,7 +85,7 @@ namespace App2
             //parent.Children.Add(new Label { Text = "Text", HorizontalOptions = LayoutOptions.FillAndExpand, HorizontalTextAlignment = TextAlignment.Start }, 2, 0);
             //parent.Children.Add(new Label { Text = "Body", HorizontalOptions = LayoutOptions.End, HorizontalTextAlignment = TextAlignment.End }, 3, 0);
 
-            #endregion           
+            #endregion
 
             int start = pageIndex * PickerItem;
             int end = Math.Min(start + PickerItem, stands.Count);

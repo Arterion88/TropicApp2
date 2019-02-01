@@ -8,11 +8,10 @@
         <StackLayout>
             <Label
                 x:Name="lbl"
-                Text="Applikace se načítá"
+                Text="Aplikace se načítá..."
                    VerticalOptions="CenterAndExpand" 
                    HorizontalOptions="CenterAndExpand" />
-
-           
+            <Button Text="Spustit" HorizontalOptions="Center" Clicked="Button_Clicked"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -20,8 +20,16 @@ namespace App2.Droid
             base.OnCreate(savedInstanceState);
             Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-
-            LoadApplication(new App());
+            try
+            {
+                LoadApplication(new App());
+            }
+            catch (System.Exception ex)
+            {
+                Crashes.TrackError(ex);
+                throw;
+            }
+            
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)

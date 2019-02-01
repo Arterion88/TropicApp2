@@ -76,15 +76,17 @@ namespace App2
                 return false;
             try
             {
-                foreach (XmlNode node in doc.GetElementsByTagName("Event"))
-                {
-                    Event event1 = new Event(node);
+                //foreach (XmlNode node in doc.GetElementsByTagName("Event"))
+                //{
+                //    Event event1 = new Event(node);
 
-                    if (DateTime.Now < event1.To)
-                        if (!FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
-                            Events.Add(event1);
-                }
-                CurrentEvent = Events[0];
+                //    if (DateTime.Now < event1.To)
+                //        if (!FinishedEvents.Split(';').ToList().Contains(event1.Id.ToString()))
+                //            Events.Add(event1);
+                //}
+                CurrentEvent = new Event(doc.GetElementsByTagName("Event")[0]);
+
+                //CurrentEvent = Events[0];
             }
             catch (Exception ex)
             {

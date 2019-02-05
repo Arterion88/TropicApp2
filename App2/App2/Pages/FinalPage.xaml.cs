@@ -76,12 +76,11 @@ namespace App2.Pages
                 Settings.FinishedEvents += Settings.CurrentEvent.Id.ToString() + ";";
                 List<string> list = Settings.Stands.Split('.').ToList();
                 list.RemoveAll(x => x.StartsWith(Settings.CurrentEvent.Id + "."));
-                Navigation.PushAsync(new LoadPage());
+                DisplayAlert("Posláno", "Jste úspěšně zaregistrováni do soutěže.", "Ok");
             }
             catch (Exception ex)
             {
                 DisplayAlert("Chyba", ex.Message, "Ok");
-                DisplayAlert("Chyba", ex.InnerException.Message, "Ok");
                 Crashes.TrackError(ex);
                 return;
             } 
@@ -122,7 +121,7 @@ namespace App2.Pages
             }
             if (editPhone.Text.Length<9 && editPhone.Text != string.Empty)
             {
-                DisplayAlert("Neplatené telefoní číslo", "Zadané telefonní číslo má pouze "+editPhone.Text.Length+"!", "Ok"); //TODO: Test
+                DisplayAlert("Neplatené telefoní číslo", "Zadané telefonní číslo musí mít alespoň 9 znaků!", "Ok"); //TODO: Test
                 return true;
             }
 
@@ -135,7 +134,7 @@ namespace App2.Pages
             try
             {
                 System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
-                return true;
+                return m.Address==email;
             }
             catch (Exception)
             {

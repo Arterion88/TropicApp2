@@ -1,4 +1,5 @@
-﻿using Microsoft.AppCenter.Crashes;
+﻿using App2.Pages;
+using Microsoft.AppCenter.Crashes;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
@@ -60,10 +61,14 @@ namespace App2
                 doc.Load(XmlPath);
                 return doc;
             }
+            catch (WebException ex)
+            {
+                ((LoadPage)page).LoadPageLbl = ex.Message;
+                return null;
+            }
             catch (Exception ex)
             {
-                page.DisplayAlert("Chyba", ex.Message, "Ok");
-                Crashes.TrackError(ex);
+                ((LoadPage)page).LoadPageLbl = ex.Message;
                 return null;
             }
             
